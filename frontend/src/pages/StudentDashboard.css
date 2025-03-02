@@ -1,0 +1,58 @@
+.student-dashboard {
+  display: flex;
+  height: 100vh;
+  background-color: #f8f9fa;
+}
+
+/* Sidebar Styling */
+.student-sidebar {
+  width: 250px;
+  background-color: #212529;
+  color: white;
+  padding: 20px;
+  position: fixed;
+  height: 100%;
+}
+
+.student-sidebar h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.student-sidebar a {
+  color: white;
+  padding: 10px;
+  display: block;
+  text-decoration: none;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.student-sidebar a:hover {
+  background-color: #343a40;
+}
+
+/* Content Area */
+.student-content {
+  margin-left: 250px;
+  padding: 20px;
+  flex-grow: 1;
+}
+
+/* Cards */
+.student-card {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.student-card p {
+  margin: 0;
+}
+
+/* Table Styling */
+.table th, .table td {
+  text-align: center;
+}

@@ -1,0 +1,46 @@
+/* Custom Navbar Styling */
+.navbar-custom {
+  background: #f8f9fa; /* Light background */
+  padding: 10px 20px;
+}
+
+.brand-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.navbar-nav .nav-link {
+  color: #555;
+  font-size: 1rem;
+  margin-right: 15px;
+  transition: color 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #007bff; /* Bootstrap primary color */
+}
+
+.btn-custom {
+  background-color: #007bff;
+  border: none;
+  padding: 8px 15px;
+  color: white;
+  transition: background 0.3s ease-in-out;
+}
+
+.btn-custom:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 991px) {
+  .navbar-nav {
+    text-align: center;
+    margin-top: 10px;
+  }
+  .btn-custom {
+    width: 100%;
+    margin-top: 10px;
+  }
+}

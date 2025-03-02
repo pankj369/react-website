@@ -1,0 +1,105 @@
+.hero {
+  position: relative;
+  text-align: center;
+  color: white;
+  padding: 100px 20px;
+  background: linear-gradient(to right, #00467f, #a5cc82);
+  overflow: hidden;
+}
+
+.hero-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url("/assets/library-bg.jpg") no-repeat center center/cover;
+  opacity: 0.4;
+  top: 0;
+  left: 0;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: auto;
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.hero-description {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  margin-bottom: 30px;
+}
+
+.hero-buttons button {
+  padding: 12px 25px;
+  border: none;
+  font-size: 1rem;
+  border-radius: 25px;
+  margin: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-primary {
+  background: #ff7b00;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #e66a00;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+.btn-secondary:hover {
+  background: white;
+  color: #00467f;
+}
+
+/* Floating Images */
+.floating-images {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.floating-img {
+  width: 80px;
+  opacity: 0.8;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  .hero-description {
+    font-size: 1rem;
+  }
+  .floating-images {
+    display: none; /* Hide floating images on small screens */
+  }
+}

@@ -1,0 +1,32 @@
+.register-container {
+  padding: 50px 0;
+}
+
+.register-card {
+  padding: 30px;
+  border-radius: 15px;
+  background: #f8f9fa;
+}
+
+.register-card h3 {
+  font-weight: bold;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+  transition: 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+a:hover {
+  text-decoration: underline;
+}
