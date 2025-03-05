@@ -1,9 +1,7 @@
-const express = require("express");
-const { getStudentDashboard, getAdminDashboard } = require("../controllers/dashboardController");
+const router = require('express').Router();
+const dashboardController = require('../controllers/dashboardController');
+const { verifyToken } = require('../middleware/authMiddleware');
 
-const router = express.Router();
-
-router.get("/student/dashboard", getStudentDashboard);
-router.get("/admin/dashboard", getAdminDashboard);
+router.get('/dashboard', verifyToken, dashboardController.getStudentDashboard);
 
 module.exports = router;

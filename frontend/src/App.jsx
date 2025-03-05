@@ -1,26 +1,33 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";  
-import Footer from "./components/Footer";
-import Home from "./pages/Home";  
-import AdminDashboard from "./pages/AdminDashboard";
-import StudentDashboard from "./pages/StudentDashboard";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import StudentDashboard from './pages/StudentDashboard';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
+  const isAuthenticated = !!localStorage.getItem('token');
+  const userRole = JSON.parse(localStorage.getItem('user'))?.role;
+
   return (
-    <Router>
-    
+    <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/student" element={<StudentDashboard />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route 
+          path="/dashboard" 
+          element={
+            isAuthenticated ? (
+              userRole === 'admin' ? 
+                <AdminDashboard /> : 
+                <StudentDashboard />
+            ) : (
+              <Navigate to="/login" />
+            )
+          } 
+        />
+        <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
-
 export default App;

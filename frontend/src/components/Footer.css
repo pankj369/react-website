@@ -1,96 +1,192 @@
-
-/* Footer Styles */
 .footer {
-  background-color: #111;
+  background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+  padding: 70px 0 20px;
   color: #fff;
-  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
 }
 
-.footer h4 {
-  font-size: 18px;
-  margin-bottom: 15px;
-}.footer p,
-.footer ul {
-  font-size: 14px;
-  line-height: 1.8;
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(to right, #ff6b6b, #ff8e53);
 }
 
-.footer ul {
+.footer-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.footer-col {
+  padding: 0 15px;
+}
+
+.footer-col h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 25px;
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+
+.footer-col h4:hover {
+  color: #ff8e53;
+}
+
+.footer-col h4::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 40px;
+  height: 2px;
+  background: #ff8e53;
+  transition: width 0.3s ease;
+}
+
+.footer-col h4:hover::after {
+  width: 100%;
+}
+
+.footer-col p {
+  color: #b3b3b3;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.footer-col ul {
   list-style: none;
   padding: 0;
 }
 
-.footer ul li {
-  margin-bottom: 10px;
+.footer-col ul li {
+  margin-bottom: 12px;
 }
 
-.footer ul li a {
-  color: #bbb;
+.footer-col ul li a {
+  color: #b3b3b3;
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  display: inline-block;
+  position: relative;
 }
 
-.footer ul li a:hover {
+.footer-col ul li a::before {
+  content: '→';
+  position: absolute;
+  left: -20px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.footer-col ul li a:hover {
   color: #fff;
+  padding-left: 20px;
 }
 
-.footer-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.footer-col {
-  flex: 1 1 calc(25% - 20px);
-  min-width: 200px;
+.footer-col ul li a:hover::before {
+  opacity: 1;
 }
 
 .footer-bottom {
-  text-align: center;
-  margin-top: 20px;
-  border-top: 1px solid #444;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.footer-bottom .social-links a {
-  margin: 0 10px;
-  color: #bbb;
-  font-size: 18px;
-  transition: color 0.3s ease;
+.footer-bottom p {
+  color: #b3b3b3;
+  margin: 0;
 }
 
-.footer-bottom .social-links a:hover {
+.social-links {
+  display: flex;
+  gap: 15px;
+}
+
+.social-links a {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
   color: #fff;
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
+
+.social-links a:hover {
+  background: #ff8e53;
+  transform: translateY(-3px);
+}
+
+/* Animation for list items */
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: translateY(10px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+.footer-col ul li {
+  animation: fadeIn 0.3s ease forwards;
+  opacity: 0;
+}
+
+.footer-col ul li:nth-child(1) { animation-delay: 0.1s; }
+.footer-col ul li:nth-child(2) { animation-delay: 0.2s; }
+.footer-col ul li:nth-child(3) { animation-delay: 0.3s; }
+.footer-col ul li:nth-child(4) { animation-delay: 0.4s; }
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .footer {
+      padding: 50px 0 20px;
+  }
+
   .footer-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+      gap: 40px;
+  }
+
+  .footer-bottom {
+      flex-direction: column;
+      text-align: center;
+  }
+
+  .social-links {
+      justify-content: center;
   }
 }
-/* Responsive Design */
-@media (max-width: 768px) {
-  .nav-links {
-    display: none;
-    flex-direction: column;
-    background: #333;
-    position: absolute;
-    top: 60px;
-    right: 0;
-    width: 150px;
-    border-radius: 5px;
+
+@media (max-width: 576px) {
+  .footer-col {
+      padding: 0;
   }
 
-  .nav-links.active {
-    display: flex;
+  .footer-col h4 {
+      font-size: 1.1rem;
   }
 
-  .features {
-    flex-direction: column;
-    gap: 1.5rem;
+  .social-links a {
+      width: 30px;
+      height: 30px;
   }
 }

@@ -1,26 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
-import "./Navbar.css";  // ✅ Ensure custom styles
+import Sidebar from "./Sidebar";
+import "./Navbar.css";
 
 const NavigationBar = () => {
+  const [showSidebar, setShowSidebar] = useState(false);
+
+  const handleSidebarClose = () => setShowSidebar(false);
+  const handleSidebarShow = () => setShowSidebar(true);
+
   return (
-    <Navbar expand="lg" className="navbar-custom">
-      <Container>
-        <Navbar.Brand href="/" className="brand-logo">
-          SuccessLibrary
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="#features">Features</Nav.Link>  {/* ✅ Scroll to #features */}
-            <Nav.Link href="#about">About</Nav.Link>        {/* ✅ Scroll to #about */}
-            <Nav.Link href="/login">Login</Nav.Link>
-            <Button href="/register" className="btn-custom">Sign Up</Button>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+    <>
+      <Navbar expand="lg" className="navbar-custom" fixed="top">
+        <Container>
+          <Navbar.Brand href="/" className="brand-logo">
+            <i className="fas fa-book-reader me-2"></i>
+            SuccessLibrary
+          </Navbar.Brand>
+          <Navbar.Toggle 
+            aria-controls="basic-navbar-nav" 
+            onClick={handleSidebarShow}
+          />
+          <Navbar.Collapse id="basic-navbar-nav" className="d-none d-lg-block">
+            <Nav className="ms-auto align-items-center">
+              <Nav.Link href="/" className="nav-link-custom">
+                <i className="fas fa-home me-1"></i> Home
+              </Nav.Link>
+              <Nav.Link href="#features" className="nav-link-custom">
+                <i className="fas fa-star me-1"></i> Features
+              </Nav.Link>
+              <Nav.Link href="#about" className="nav-link-custom">
+                <i className="fas fa-info-circle me-1"></i> About
+              </Nav.Link>
+              <Nav.Link href="/login" className="nav-link-custom">
+                <i className="fas fa-sign-in-alt me-1"></i> Login
+              </Nav.Link>
+              <Button href="/register" className="btn-custom ms-2">
+                <i className="fas fa-user-plus me-1"></i> Sign Up
+              </Button>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+
+      <Sidebar show={showSidebar} handleClose={handleSidebarClose} />
+    </>
   );
 };
 

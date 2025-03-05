@@ -1,105 +1,203 @@
-.hero {
-  position: relative;
-  text-align: center;
-  color: white;
-  padding: 100px 20px;
-  background: linear-gradient(to right, #00467f, #a5cc82);
-  overflow: hidden;
+.hero-section {
+    background: url('https://images.pexels.com/photos/2943603/pexels-photo-2943603.jpeg?auto=compress&cs=tinysrgb&w=400') no-repeat center center;
+    background-size: cover;
+    min-height: 100vh;
+    position: relative;
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
-.hero-background {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: url("/assets/library-bg.jpg") no-repeat center center/cover;
-  opacity: 0.4;
-  top: 0;
-  left: 0;
+.hero-overlay {
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6));
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 100px 0;
+    will-change: transform;
 }
 
 .hero-content {
-  position: relative;
-  z-index: 1;
-  max-width: 800px;
-  margin: auto;
+    opacity: 1;
+    transform: none;
 }
 
+.hero-buttons .btn {
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    will-change: transform;
+}
+
+.hero-buttons .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Remove the animation temporarily to fix the error */
+/* We'll add it back once we confirm everything else works */
+
+.hero-features {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.feature-item {
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+}
+
+.feature-item i {
+    font-size: 1.5rem;
+    color: #007bff;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .hero-features {
+        justify-content: center;
+        gap: 1.5rem;
+    }
+    
+    .hero-content {
+        padding: 2rem 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-buttons .btn {
+        display: block;
+        width: 100%;
+        margin-right: 0 !important;
+    }
+}
 .hero-title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  margin-bottom: 20px;
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  animation: fadeInUp 1s ease;
 }
 
-.hero-description {
-  font-size: 1.2rem;
-  line-height: 1.5;
-  margin-bottom: 30px;
+.text-highlight {
+  color: #3498db;
+  position: relative;
+  display: inline-block;
 }
 
-.hero-buttons button {
-  padding: 12px 25px;
-  border: none;
-  font-size: 1rem;
-  border-radius: 25px;
-  margin: 10px;
-  cursor: pointer;
-  transition: 0.3s;
+.hero-subtitle {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  animation: fadeInUp 1s ease 0.2s;
+  animation-fill-mode: both;
 }
 
-.btn-primary {
-  background: #ff7b00;
-  color: white;
+.hero-buttons {
+  animation: fadeInUp 1s ease 0.4s;
+  animation-fill-mode: both;
 }
 
-.btn-primary:hover {
-  background: #e66a00;
+.hero-btn {
+  padding: 0.8rem 2rem;
+  border-radius: 30px;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
-.btn-secondary {
-  background: transparent;
-  color: white;
-  border: 2px solid white;
+.hero-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-.btn-secondary:hover {
-  background: white;
-  color: #00467f;
-}
-
-/* Floating Images */
-.floating-images {
-  position: absolute;
-  width: 100%;
+.hero-stats {
   display: flex;
-  justify-content: space-around;
-  top: 50%;
-  transform: translateY(-50%);
+  gap: 3rem;
+  animation: fadeInUp 1s ease 0.6s;
+  animation-fill-mode: both;
 }
 
-.floating-img {
-  width: 80px;
+.stat-item {
+  text-align: center;
+}
+
+.stat-item h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #3498db;
+  margin-bottom: 0.5rem;
+}
+
+.stat-item p {
+  font-size: 1rem;
   opacity: 0.8;
-  animation: float 3s ease-in-out infinite;
 }
 
-@keyframes float {
-  0%, 100% {
+.hero-image-container {
+  position: relative;
+  animation: fadeInRight 1s ease 0.8s;
+  animation-fill-mode: both;
+}
+
+.hero-image {
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
     transform: translateY(0);
   }
-  50% {
-    transform: translateY(-15px);
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 991px) {
   .hero-title {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
-  .hero-description {
-    font-size: 1rem;
+  
+  .hero-subtitle {
+    font-size: 1.1rem;
   }
-  .floating-images {
-    display: none; /* Hide floating images on small screens */
+  
+  .hero-stats {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .hero-btn {
+    width: 100%;
+  }
+  
+  .hero-stats {
+    flex-direction: column;
+    gap: 1.5rem;
   }
 }

@@ -1,47 +1,44 @@
-const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const db = require("../db");
-const router = express.Router();
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const UserService = require('../services/userService');
 
-router.post("/register", async (req, res) => {
-  const { name, email, contact_number, batch, password, confirm_password, role } = req.body;
-
-  // 1️⃣ Validate Input Fields
-  if (!name || !email || !contact_number || !batch || !password || !confirm_password || !role) {
-    return res.status(400).json({ message: "All fields are required" });
-  }
-  
-  if (password !== confirm_password) {
-    return res.status(400).json({ message: "Passwords do not match" });
-  }
-
+exports.register = async (req, res) => {
   try {
-    // 2️⃣ Check if User Already Exists
-    const [existingUser] = await db.promise().query("SELECT * FROM users WHERE email = ?", [email]);
+    const { fullname, email, contact, batch, password, role } = req.body;
 
-    if (existingUser.length > 0) {
-      return res.status(400).json({ message: "User already exists" });
+    // Check if user exists
+    const existingUser = await UserService.findByEmail(email);
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already registered' });
     }
 
-    // 3️⃣ Hash the Password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Hash password and create user
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const userId = await UserService.create({
+      fullname,
+      email,
+      contact,
+      batch,
+      password: hashedPassword,
+      role: role || 'student'
+    });
 
-    // 4️⃣ Insert User into Database
-    await db.promise().query(
-      "INSERT INTO users (name, email, contact_number, batch, password, role) VALUES (?, ?, ?, ?, ?, ?)",
-      [name, email, contact_number, batch, hashedPassword, role]
-    );
+    const user = await UserService.findById(userId);
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+      expiresIn: '30d'
+    });
 
-    // 5️⃣ Generate JWT Token
-    const token = jwt.sign({ email, role }, process.env.JWT_SECRET, { expiresIn: "1h" });
-
-    res.status(201).json({ message: "User registered successfully", token });
-
+    res.status(201).json({
+      success: true,
+      token,
+      user: {
+        id: user.id,
+        fullname: user.fullname,
+        email: user.email,
+        role: user.role
+      }
+    });
   } catch (error) {
-    console.error("Registration Error:", error);
-    res.status(500).json({ message: "User registration failed", error: error.message });
+    res.status(500).json({ message: error.message });
   }
-});
-
-module.exports = router;
+};
