@@ -1,0 +1,45 @@
+.student-profile {
+    padding: 20px;
+}
+
+.student-profile .card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.student-profile .card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 1rem;
+}
+
+.student-profile .form-control:disabled {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+
+.student-profile .btn-primary {
+    background-color: #1a237e;
+    border-color: #1a237e;
+}
+
+.student-profile .btn-primary:hover {
+    background-color: #283593;
+    border-color: #283593;
+}
+
+.student-profile .btn-secondary {
+    background-color: #757575;
+    border-color: #757575;
+}
+
+.student-profile .btn-secondary:hover {
+    background-color: #616161;
+    border-color: #616161;
+}
+
+@media (max-width: 768px) {
+    .student-profile {
+        padding: 10px;
+    }
+}

@@ -30,24 +30,39 @@ const Register = () => {
     setLoading(true);
     setError('');
     
+    // Validate all required fields
+    if (!formData.fullName || !formData.email || !formData.contact || 
+        !formData.batch || !formData.password || !formData.confirmPassword) {
+      setError('Please fill in all fields');
+      setLoading(false);
+      return;
+    }
+
+    // Validate passwords match
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.post('http://localhost:5000/api/auth/register', {
-        fullname: formData.fullName,
+        fullname: formData.fullName,    // Changed from name to fullname
         email: formData.email,
         contact: formData.contact,
         batch: formData.batch,
         password: formData.password,
-        confirm_password: formData.confirmPassword,
-        role: userType  // Add this line to include the role
+        role: userType
       });
 
-      if (response.data.success) {
+      if (response.data) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
-        navigate('/dashboard');
+        navigate(userType === 'admin' ? '/admin/dashboard' : '/student/dashboard');
       }
     } catch (error) {
-      setError(error.response?.data?.message || 'Registration failed');
+      console.error('Registration error:', error.response?.data);
+      setError(error.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }

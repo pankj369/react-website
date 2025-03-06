@@ -1,53 +1,55 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const db = require("./config/db");
-
-dotenv.config();
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const mysql = require('mysql2');
+const authRoutes = require('./routes/authRoutes');
+const bookRoutes = require('./routes/bookRoutes');
+const studentRoutes = require('./routes/studentRoutes');
 
 const app = express();
 
+// Database connection
+const db = mysql.createConnection({
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASS || 'your_password',
+    database: process.env.DB_NAME || 'library_management'
+});
+
+db.connect((err) => {
+    if (err) {
+        console.error('Error connecting to database:', err);
+        return;
+    }
+    console.log('Connected to MySQL database');
+});
+
 // Middleware
-app.use(cors());
-app.use(bodyParser.json());
+// Update CORS configuration
+app.use(cors({
+    origin: 'http://localhost:3001', // Update this to match your frontend URL
+    credentials: true
+}));
+app.use(express.json());
 
-// Test database connection
-const testConnection = async () => {
-  try {
-    await db.query('SELECT 1');
-    console.log('✅ Database connection test successful');
-  } catch (error) {
-    console.error('❌ Database connection test failed:', error.message);
-    process.exit(1);
-  }
-};
-
-testConnection();
+// Add this line to debug requests
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.path}`);
+    next();
+});
 
 // Routes
-app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/dashboard", require("./routes/dashboardRoutes"));
-app.use("/api/attendance", require("./routes/attendanceRoutes"));
-app.use("/api/borrowings", require("./routes/borrowingRoutes"));
-app.use("/api/courses", require("./routes/courseRoutes"));
-app.use("/api/payments", require("./routes/paymentRoutes"));
+app.use('/api/auth', authRoutes);
+app.use('/api/admin', bookRoutes);
+app.use('/api/admin', studentRoutes);
 
-// Default Route
-app.get("/", (req, res) => {
-  res.json({ message: "Library Management System Backend is Running!" });
-});
-
-// Error Handling
+// Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ 
-    success: false,
-    message: "Something went wrong!", 
-    error: err.message 
-  });
+    console.error(err.stack);
+    res.status(500).json({ message: 'Something went wrong!' });
 });
 
-// Start Server
-const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+const PORT = process.env.PORT || 5000; // Make sure this matches your frontend API calls
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});

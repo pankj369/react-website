@@ -17,32 +17,28 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
-    
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
-        email: formData.email,
-        password: formData.password
-      });
-
-      if (response.data.success) {
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-        
-        // Remember me functionality
-        if (formData.rememberMe) {
-          localStorage.setItem('rememberedEmail', formData.email);
-        } else {
-          localStorage.removeItem('rememberedEmail');
+        const response = await axios.post('http://localhost:5000/api/auth/login', {
+            email: formData.email,
+            password: formData.password
+        });
+        if (response.data) {
+            // Store token and user data
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+            
+            // Redirect based on role
+            if (response.data.user.role === 'student') {
+                navigate('/student/dashboard');  // Updated path
+            } else if (response.data.user.role === 'admin') {
+                navigate('/admin/dashboard');    // Updated path
+            }
         }
-
-        // Redirect to dashboard
-        navigate('/dashboard');
-      }
     } catch (error) {
-      setError(error.response?.data?.message || 'Login failed');
+        console.error('Login error:', error);
+        setError(error.response?.data?.message || 'Invalid email or password');
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
   };
   return (

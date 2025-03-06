@@ -1,0 +1,65 @@
+.borrowing-management {
+    padding: 20px;
+}
+
+.borrowing-management .card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.borrowing-management .card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 1rem;
+}
+
+.borrowing-management .table th {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.borrowing-management .table td {
+    vertical-align: middle;
+}
+
+.borrowing-management .badge {
+    padding: 0.5em 0.8em;
+    font-weight: 500;
+}
+
+.borrowing-management .badge.bg-success {
+    background-color: #4caf50 !important;
+}
+
+.borrowing-management .badge.bg-warning {
+    background-color: #ff9800 !important;
+}
+
+.borrowing-management .badge.bg-danger {
+    background-color: #f44336 !important;
+}
+
+.borrowing-management .btn-primary {
+    background-color: #1a237e;
+    border-color: #1a237e;
+}
+
+.borrowing-management .btn-primary:hover {
+    background-color: #283593;
+    border-color: #283593;
+}
+
+@media (max-width: 768px) {
+    .borrowing-management {
+        padding: 10px;
+    }
+    
+    .borrowing-management .table {
+        font-size: 14px;
+    }
+    
+    .borrowing-management .btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 12px;
+    }
+}

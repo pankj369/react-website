@@ -1,0 +1,57 @@
+.reports {
+    padding: 20px;
+}
+
+.reports .stat-card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: none;
+    transition: transform 0.2s;
+}
+
+.reports .stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.reports .stat-card h6 {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.reports .stat-card h3 {
+    color: #1a237e;
+    margin: 0;
+}
+
+.reports .card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.reports .card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 1rem;
+}
+
+.reports .table th {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.reports .table td {
+    vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+    .reports {
+        padding: 10px;
+    }
+    
+    .reports .stat-card {
+        margin-bottom: 15px;
+    }
+    
+    .reports .table {
+        font-size: 14px;
+    }
+}

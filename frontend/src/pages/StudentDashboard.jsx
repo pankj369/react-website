@@ -4,6 +4,7 @@ import axios from 'axios';
 import './StudentDashboard.css';
 import BorrowingList from '../components/BorrowingList';
 import AttendanceTracker from '../components/AttendanceTracker';
+import StudentSidebar from '../components/StudentSidebar';  // Make sure this import is correct
 
 const StudentDashboard = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
@@ -63,11 +64,9 @@ const StudentDashboard = () => {
 
   return (
     <div className="student-dashboard">
-      <Sidebar />
+      <StudentSidebar />  {/* Changed from Sidebar to StudentSidebar */}
       <div className="main-content">
-        <DashboardHeader />
         <Container fluid>
-          {/* Existing stats row */}
           <Row className="mt-4">
             <Col md={7}>
               <BorrowingList />

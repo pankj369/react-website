@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Tabs, Tab } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Modal, Form, Tabs, Tab } from 'react-bootstrap';
 import axios from 'axios';
 import StudentManagement from '../components/StudentManagement';
 import BookManagement from '../components/BookManagement';
 import Reports from '../components/Reports';
+import AdminSidebar from '../components/AdminSidebar';
+import AdminHeader from '../components/AdminHeader';
+import DashboardStats from '../components/DashboardStats';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -26,11 +29,16 @@ const AdminDashboard = () => {
     email: user?.email || '',
     contact: user?.contact || ''
   });
+  const [reportData, setReportData] = useState({
+    borrowingData: null,
+    attendanceData: null,
+    booksData: null
+  });
 
   useEffect(() => {
     fetchDashboardData();
+    fetchReportData();
   }, []);
-
   const fetchDashboardData = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -51,6 +59,108 @@ const AdminDashboard = () => {
       console.error('Error fetching dashboard data:', error);
     }
   };
+  const fetchReportData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const headers = { Authorization: `Bearer ${token}` };
+
+      const [borrowings, attendance, bookStats] = await Promise.all([
+        axios.get('http://localhost:5000/api/admin/reports/borrowings', { headers }),
+        axios.get('http://localhost:5000/api/admin/reports/attendance', { headers }),
+        axios.get('http://localhost:5000/api/admin/reports/books', { headers })
+      ]);
+
+      setReportData({
+        borrowingData: borrowings.data,
+        attendanceData: attendance.data,
+        booksData: bookStats.data
+      });
+    } catch (error) {
+      console.error('Error fetching report data:', error);
+    }
+  };
+  const renderOverviewTab = () => (
+    <>
+      <Row className="stats-row">
+        <Col md={3}>
+          <Card className="stat-card">
+            <Card.Body>
+              <div className="stat-icon">
+                <i className="fas fa-users"></i>
+              </div>
+              <div className="stat-info">
+                <h3>{students.length}</h3>
+                <p>Total Students</p>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={3}>
+          <Card className="stat-card">
+            <Card.Body>
+              <div className="stat-icon">
+                <i className="fas fa-book"></i>
+              </div>
+              <div className="stat-info">
+                <h3>{books.length}</h3>
+                <p>Total Books</p>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={3}>
+          <Card className="stat-card">
+            <Card.Body>
+              <div className="stat-icon">
+                <i className="fas fa-book-reader"></i>
+              </div>
+              <div className="stat-info">
+                <h3>{reportData.borrowingData?.totalActive || 0}</h3>
+                <p>Active Borrowings</p>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={3}>
+          <Card className="stat-card">
+            <Card.Body>
+              <div className="stat-icon">
+                <i className="fas fa-clock"></i>
+              </div>
+              <div className="stat-info">
+                <h3>{reportData.borrowingData?.overdue || 0}</h3>
+                <p>Overdue Books</p>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+
+      <Row className="mt-4">
+        <Col md={8}>
+          <Card>
+            <Card.Header>Recent Activities</Card.Header>
+            <Card.Body>
+              <Reports {...reportData} />
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={4}>
+          <Card>
+            <Card.Header>Quick Actions</Card.Header>
+            <Card.Body>
+              <Button variant="primary" className="w-100 mb-2" onClick={() => setShowAddBookModal(true)}>
+                <i className="fas fa-plus me-2"></i>Add New Book
+              </Button>
+              <Button variant="outline-primary" className="w-100">
+                <i className="fas fa-file-export me-2"></i>Export Reports
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </>
+  );
 
   const handleAddBook = async (e) => {
     e.preventDefault();
@@ -156,62 +266,31 @@ const AdminDashboard = () => {
         </header>
 
         <Container fluid className="dashboard-content">
-          <Row className="stats-row">
-            <Col md={3}>
-              <Card className="stat-card">
-                <Card.Body>
-                  <div className="stat-icon">
-                    <i className="fas fa-users"></i>
-                  </div>
-                  <div className="stat-info">
-                    <h3>{students.length}</h3>
-                    <p>Total Students</p>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={3}>
-              <Card className="stat-card">
-                <Card.Body>
-                  <div className="stat-icon">
-                    <i className="fas fa-book"></i>
-                  </div>
-                  <div className="stat-info">
-                    <h3>{books.length}</h3>
-                    <p>Total Books</p>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-            {/* Add more stat cards */}
-          </Row>
-
-          <Row className="mt-4">
-            <Col>
-              <Card>
-                <Card.Header className="d-flex justify-content-between align-items-center">
-                  <h5>Recent Book Borrowings</h5>
-                  <Button variant="outline-primary" size="sm">
-                    View All
-                  </Button>
-                </Card.Header>
-                <Card.Body>
-                  <BorrowingList />
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-
-          <Row className="mt-4">
-            <Col md={8}>
-              {/* Existing books management table */}
-            </Col>
-            <Col md={4}>
-              <AttendanceTracker />
-            </Col>
-          </Row>
+          <Tabs
+            activeKey={activeTab}
+            onSelect={(k) => setActiveTab(k)}
+            className="mb-4"
+          >
+            <Tab eventKey="overview" title="Overview">
+              {renderOverviewTab()}
+            </Tab>
+            <Tab eventKey="students" title="Students">
+              <StudentManagement students={students} />
+            </Tab>
+            <Tab eventKey="books" title="Books">
+              <BookManagement
+                books={books}
+                onAddBook={handleAddBook}
+                onUpdateBook={handleProfileUpdate}
+                onDeleteBook={(id) => console.log('Delete book:', id)}
+              />
+            </Tab>
+            <Tab eventKey="reports" title="Reports">
+              <Reports {...reportData} />
+            </Tab>
+          </Tabs>
         </Container>
-
+        
         {/* Add Book Modal */}
         <Modal show={showAddBookModal} onHide={() => setShowAddBookModal(false)}>
           <Modal.Header closeButton>

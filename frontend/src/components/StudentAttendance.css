@@ -1,0 +1,50 @@
+.student-attendance {
+    padding: 20px;
+}
+
+.student-attendance .card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.student-attendance .card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 1rem;
+}
+
+.student-attendance .table th {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.student-attendance .table td {
+    vertical-align: middle;
+}
+
+.student-attendance .badge {
+    padding: 0.5em 0.8em;
+    font-weight: 500;
+}
+
+.student-attendance .badge.bg-success {
+    background-color: #4caf50 !important;
+}
+
+.student-attendance .badge.bg-warning {
+    background-color: #ff9800 !important;
+}
+
+.student-attendance .badge.bg-danger {
+    background-color: #f44336 !important;
+}
+
+@media (max-width: 768px) {
+    .student-attendance {
+        padding: 10px;
+    }
+    
+    .student-attendance .table {
+        font-size: 14px;
+    }
+}
