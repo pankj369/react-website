@@ -6,8 +6,8 @@ import StudentDashboard from './pages/StudentDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import PrivateRoute from './components/PrivateRoute';
 import StudentBooks from './components/StudentBooks';
-import StudentBorrowings from './components/StudentBorrowings';
-import StudentAttendance from './components/StudentAttendance';
+import StudentBorrowings from "./components/StudentBorrowings";
+import StudentAttendance from "./components/StudentAttendance";
 import StudentProfile from './components/StudentProfile';
 import BookManagement from './components/BookManagement';
 import StudentManagement from './components/StudentManagement';
@@ -47,7 +47,7 @@ function App() {
             </Routes>
           </PrivateRoute>
         } />
-
+        
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

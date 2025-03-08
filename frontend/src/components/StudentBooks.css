@@ -1,54 +1,143 @@
-.student-books {
-    padding: 20px;
+.books-header {
+  margin-bottom: 2rem;
 }
 
-.student-books .card {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border: none;
+.books-header h2 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
 }
 
-.student-books .card-header {
-    background-color: #fff;
-    border-bottom: 1px solid #eee;
-    padding: 1rem;
+.search-filters {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.student-books .table th {
-    background-color: #f8f9fa;
-    border-bottom: 2px solid #dee2e6;
+.search-bar {
+  margin-bottom: 1rem;
 }
 
-.student-books .table td {
-    vertical-align: middle;
+.search-bar .input-group-text {
+  background: white;
+  border-right: none;
 }
 
-.student-books .badge {
-    padding: 0.5em 0.8em;
-    font-weight: 500;
+.search-bar .form-control {
+  border-left: none;
+  padding: 0.75rem;
 }
 
-.student-books .btn-primary {
-    background-color: #1a237e;
-    border-color: #1a237e;
+.search-bar .form-control:focus {
+  box-shadow: none;
+  border-color: #ced4da;
 }
 
-.student-books .btn-primary:hover:not(:disabled) {
-    background-color: #283593;
-    border-color: #283593;
+.category-filter {
+  padding: 0.75rem;
+  border-radius: 8px;
 }
 
-.student-books .btn-primary:disabled {
-    background-color: #9fa8da;
-    border-color: #9fa8da;
+.books-grid {
+  margin-top: 2rem;
+}
+
+.book-card {
+  margin-bottom: 2rem;
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.book-card:hover {
+  transform: translateY(-5px);
+}
+
+.book-cover {
+  position: relative;
+  height: 250px;
+  overflow: hidden;
+}
+
+.book-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.book-status {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status-badge.available {
+  background: #2ecc71;
+  color: white;
+}
+
+.status-badge.borrowed {
+  background: #e74c3c;
+  color: white;
+}
+
+.book-card h3 {
+  font-size: 1.2rem;
+  margin: 0;
+  color: #2c3e50;
+}
+
+.book-card .author {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
+
+.book-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #95a5a6;
+}
+
+.book-details span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.loading-spinner {
+  width: 100%;
+  text-align: center;
+  padding: 3rem;
+  color: #7f8c8d;
+}
+
+.loading-spinner i {
+  font-size: 2rem;
+  margin-bottom: 1rem;
 }
 
 @media (max-width: 768px) {
-    .student-books {
-        padding: 10px;
-    }
-
-    .student-books .input-group {
-        width: 100%;
-        margin-bottom: 10px;
-    }
+  .search-filters .row {
+    flex-direction: column;
+  }
+  
+  .category-filter {
+    margin-top: 1rem;
+  }
+  
+  .book-card {
+    margin-bottom: 1rem;
+  }
 }

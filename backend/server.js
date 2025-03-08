@@ -27,7 +27,7 @@ db.connect((err) => {
 // Middleware
 // Update CORS configuration
 app.use(cors({
-    origin: 'http://localhost:3001', // Update this to match your frontend URL
+    origin: 'http://localhost:3000', // Update this to match your frontend URL
     credentials: true
 }));
 app.use(express.json());

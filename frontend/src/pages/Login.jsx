@@ -21,7 +21,14 @@ const Login = () => {
         const response = await axios.post('http://localhost:5000/api/auth/login', {
             email: formData.email,
             password: formData.password
-        });
+        },
+        {
+          withCredentials: true,
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      }
+      );
         if (response.data) {
             // Store token and user data
             localStorage.setItem('token', response.data.token);
@@ -50,8 +57,7 @@ const Login = () => {
       
       <Container>
         <Row className="justify-content-center">
-          <Col md={6} lg={5}>
-            <div className="auth-card">
+          <Col md={6} lg={5}>            <div className="auth-card">
               <div className="auth-header">
                 <div className="auth-logo">
                   <i className="fas fa-book-reader"></i>

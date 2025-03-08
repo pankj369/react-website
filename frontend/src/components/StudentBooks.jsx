@@ -1,111 +1,111 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Table, Badge, Form, InputGroup, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Form, InputGroup } from 'react-bootstrap';
 import axios from 'axios';
 import './StudentBooks.css';
 
 const StudentBooks = () => {
-    const [books, setBooks] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [sortField, setSortField] = useState('title');
-    const [sortDirection, setSortDirection] = useState('asc');
+  const [books, setBooks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [category, setCategory] = useState('all');
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        fetchBooks();
-    }, []);
+  useEffect(() => {
+    fetchBooks();
+  }, []);
 
-    const fetchBooks = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:5000/api/books', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setBooks(response.data);
-        } catch (error) {
-            console.error('Error fetching books:', error);
-        }
-    };
+  const fetchBooks = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:5000/api/books', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setBooks(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching books:', error);
+      setLoading(false);
+    }
+  };
 
-    const handleSort = (field) => {
-        setSortDirection(sortField === field && sortDirection === 'asc' ? 'desc' : 'asc');
-        setSortField(field);
-    };
+  const filteredBooks = books.filter(book => {
+    const matchesSearch = book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         book.author.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = category === 'all' || book.category === category;
+    return matchesSearch && matchesCategory;
+  });
 
-    const filteredBooks = books.filter(book =>
-        book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.isbn.includes(searchTerm)
-    );
-
-    const sortedBooks = [...filteredBooks].sort((a, b) => {
-        if (sortDirection === 'asc') {
-            return a[sortField] > b[sortField] ? 1 : -1;
-        }
-        return a[sortField] < b[sortField] ? 1 : -1;
-    });
-
-    return (
-        <div className="student-books">
-            <Card>
-                <Card.Header>
-                    <div className="d-flex justify-content-between align-items-center">
-                        <h5>Available Books</h5>
-                        <InputGroup className="w-auto">
-                            <Form.Control
-                                placeholder="Search books..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                            <Button variant="outline-secondary">
-                                <i className="fas fa-search"></i>
-                            </Button>
-                        </InputGroup>
-                    </div>
-                </Card.Header>
-                <Card.Body>
-                    <Table responsive hover>
-                        <thead>
-                            <tr>
-                                <th onClick={() => handleSort('title')} style={{ cursor: 'pointer' }}>
-                                    Title {sortField === 'title' && <i className={`fas fa-sort-${sortDirection}`}></i>}
-                                </th>
-                                <th onClick={() => handleSort('author')} style={{ cursor: 'pointer' }}>
-                                    Author {sortField === 'author' && <i className={`fas fa-sort-${sortDirection}`}></i>}
-                                </th>
-                                <th>ISBN</th>
-                                <th>Category</th>
-                                <th>Available</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {sortedBooks.map((book) => (
-                                <tr key={book.id}>
-                                    <td>{book.title}</td>
-                                    <td>{book.author}</td>
-                                    <td>{book.isbn}</td>
-                                    <td>{book.category}</td>
-                                    <td>
-                                        <Badge bg={book.available > 0 ? 'success' : 'danger'}>
-                                            {book.available}
-                                        </Badge>
-                                    </td>
-                                    <td>
-                                        <Button 
-                                            variant="primary" 
-                                            size="sm" 
-                                            disabled={book.available === 0}
-                                        >
-                                            Borrow
-                                        </Button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </Table>
-                </Card.Body>
-            </Card>
+  return (
+    <StudentLayout>
+      <Container fluid>
+        <div className="books-header">
+          <h2>Library Books</h2>
+          <div className="search-filters">
+            <Row>
+              <Col md={8}>
+                <InputGroup className="search-bar">
+                  <InputGroup.Text>
+                    <i className="fas fa-search"></i>
+                  </InputGroup.Text>
+                  <Form.Control
+                    type="text"
+                    placeholder="Search books by title or author..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </InputGroup>
+              </Col>
+              <Col md={4}>
+                <Form.Select 
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="category-filter"
+                >
+                  <option value="all">All Categories</option>
+                  <option value="fiction">Fiction</option>
+                  <option value="non-fiction">Non-Fiction</option>
+                  <option value="science">Science</option>
+                  <option value="technology">Technology</option>
+                  <option value="history">History</option>
+                </Form.Select>
+              </Col>
+            </Row>
+          </div>
         </div>
-    );
+
+        <Row className="books-grid">
+          {loading ? (
+            <div className="loading-spinner">
+              <i className="fas fa-spinner fa-spin"></i>
+              <p>Loading books...</p>
+            </div>
+          ) : (
+            filteredBooks.map(book => (
+              <Col key={book.id} lg={3} md={4} sm={6} xs={12}>
+                <Card className="book-card">
+                  <div className="book-cover">
+                    <img src={book.coverImage || '/default-book.png'} alt={book.title} />
+                    <div className="book-status">
+                      <span className={`status-badge ${book.available ? 'available' : 'borrowed'}`}>
+                        {book.available ? 'Available' : 'Borrowed'}
+                      </span>
+                    </div>
+                  </div>
+                  <Card.Body>
+                    <h3>{book.title}</h3>
+                    <p className="author">by {book.author}</p>
+                    <div className="book-details">
+                      <span><i className="fas fa-bookmark"></i> {book.category}</span>
+                      <span><i className="fas fa-hashtag"></i> {book.isbn}</span>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))
+          )}
+        </Row>
+      </Container>
+    </StudentLayout>
+  );
 };
 
 export default StudentBooks;

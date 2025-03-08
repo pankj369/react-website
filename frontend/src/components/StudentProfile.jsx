@@ -1,129 +1,174 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Form, Button, Alert } from 'react-bootstrap';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { Card, Row, Col, Button, Modal, Form, Alert } from 'react-bootstrap';
+import axios from 'axios'; // Add this import
 import './StudentProfile.css';
 
-const StudentProfile = () => {
-    const [profile, setProfile] = useState({
-        fullname: '',
-        email: '',
-        contact: '',
-        batch: ''
-    });
-    const [message, setMessage] = useState({ type: '', text: '' });
-    const [isEditing, setIsEditing] = useState(false);
+const StudentProfile = ({ user }) => {
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [formData, setFormData] = useState({
+    fullname: user?.fullname || '',
+    email: user?.email || '',
+    contact: user?.contact || '',
+    batch: user?.batch || ''
+  });
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
 
-    useEffect(() => {
-        fetchProfile();
-    }, []);
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+    setSuccess('');
 
-    const fetchProfile = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:5000/api/auth/profile', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setProfile(response.data);
-        } catch (error) {
-            console.error('Error fetching profile:', error);
-            setMessage({ type: 'danger', text: 'Error fetching profile' });
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.put(
+        'http://localhost:5000/api/student/profile',
+        formData,
+        {
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
         }
-    };
+      );
 
-    const handleChange = (e) => {
-        setProfile({ ...profile, [e.target.name]: e.target.value });
-    };
+      if (response.data) {
+        setSuccess('Profile updated successfully!');
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        setTimeout(() => {
+          setShowEditModal(false);
+          window.location.reload(); // Refresh to show updated data
+        }, 1500);
+      }
+    } catch (error) {
+      setError(error.response?.data?.message || 'Failed to update profile');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const token = localStorage.getItem('token');
-            await axios.put('http://localhost:5000/api/auth/profile', profile, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setMessage({ type: 'success', text: 'Profile updated successfully' });
-            setIsEditing(false);
-        } catch (error) {
-            console.error('Error updating profile:', error);
-            setMessage({ type: 'danger', text: 'Error updating profile' });
-        }
-    };
+  return (
+    <>
+      <Card className="profile-card">
+        <Card.Body>
+          <div className="profile-header">
+            <div className="profile-avatar">
+              <img src={user?.avatar || '/default-avatar.png'} alt="Profile" />
+              <div className="profile-status online"></div>
+            </div>
+            <div className="profile-info">
+              <h2>{user?.fullname}</h2>
+              <p className="student-id">ID: {user?.studentId}</p>
+              <div className="profile-badges">
+                <span className="badge-custom active">Active Student</span>
+                <span className="badge-custom">{user?.batch}</span>
+              </div>
+            </div>
+            <Button 
+              variant="outline-primary" 
+              className="edit-profile-btn"
+              onClick={() => setShowEditModal(true)}
+            >
+              <i className="fas fa-edit"></i> Edit Profile
+            </Button>
+          </div>
 
-    return (
-        <div className="student-profile">
-            <Card>
-                <Card.Header>
-                    <div className="d-flex justify-content-between align-items-center">
-                        <h5>My Profile</h5>
-                        <Button 
-                            variant={isEditing ? "secondary" : "primary"}
-                            onClick={() => setIsEditing(!isEditing)}
-                        >
-                            {isEditing ? 'Cancel' : 'Edit Profile'}
-                        </Button>
-                    </div>
-                </Card.Header>
-                <Card.Body>
-                    {message.text && (
-                        <Alert variant={message.type} dismissible onClose={() => setMessage({ type: '', text: '' })}>
-                            {message.text}
-                        </Alert>
-                    )}
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Full Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="fullname"
-                                value={profile.fullname}
-                                onChange={handleChange}
-                                disabled={!isEditing}
-                            />
-                        </Form.Group>
+          <Row className="profile-details mt-4">
+            <Col md={6}>
+              <div className="detail-item">
+                <i className="fas fa-envelope"></i>
+                <div>
+                  <label>Email</label>
+                  <p>{user?.email}</p>
+                </div>
+              </div>
+            </Col>
+            <Col md={6}>
+              <div className="detail-item">
+                <i className="fas fa-phone"></i>
+                <div>
+                  <label>Contact</label>
+                  <p>{user?.contact}</p>
+                </div>
+              </div>
+            </Col>
+            <Col md={6}>
+              <div className="detail-item">
+                <i className="fas fa-clock"></i>
+                <div>
+                  <label>Batch Timing</label>
+                  <p>{user?.batch}</p>
+                </div>
+              </div>
+            </Col>
+            <Col md={6}>
+              <div className="detail-item">
+                <i className="fas fa-calendar-check"></i>
+                <div>
+                  <label>Join Date</label>
+                  <p>{new Date(user?.createdAt).toLocaleDateString()}</p>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </Card.Body>
+      </Card>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                type="email"
-                                name="email"
-                                value={profile.email}
-                                onChange={handleChange}
-                                disabled={!isEditing}
-                            />
-                        </Form.Group>
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Profile</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {error && <Alert variant="danger">{error}</Alert>}
+          {success && <Alert variant="success">{success}</Alert>}
+          
+          <Form onSubmit={handleUpdate}>
+            <Form.Group className="mb-3">
+              <Form.Label>Full Name</Form.Label>
+              <Form.Control
+                type="text"
+                value={formData.fullname}
+                onChange={(e) => setFormData({...formData, fullname: e.target.value})}
+                required
+              />
+            </Form.Group>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Contact</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="contact"
-                                value={profile.contact}
-                                onChange={handleChange}
-                                disabled={!isEditing}
-                            />
-                        </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Contact Number</Form.Label>
+              <Form.Control
+                type="tel"
+                value={formData.contact}
+                onChange={(e) => setFormData({...formData, contact: e.target.value})}
+                required
+              />
+            </Form.Group>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Batch</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="batch"
-                                value={profile.batch}
-                                onChange={handleChange}
-                                disabled={!isEditing}
-                            />
-                        </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Batch</Form.Label>
+              <Form.Select
+                value={formData.batch}
+                onChange={(e) => setFormData({...formData, batch: e.target.value})}
+                required
+              >
+                <option value="">Select Batch</option>
+                <option value="Morning (8AM - 12PM)">Morning (8AM - 12PM)</option>
+                <option value="Afternoon (12PM - 4PM)">Afternoon (12PM - 4PM)</option>
+                <option value="Evening (4PM - 8PM)">Evening (4PM - 8PM)</option>
+              </Form.Select>
+            </Form.Group>
 
-                        {isEditing && (
-                            <Button variant="primary" type="submit">
-                                Save Changes
-                            </Button>
-                        )}
-                    </Form>
-                </Card.Body>
-            </Card>
-        </div>
-    );
+            <div className="d-grid">
+              <Button type="submit" variant="primary">
+                Update Profile
+              </Button>
+            </div>
+          </Form>
+        </Modal.Body>
+      </Modal>
+    </>
+  );
 };
 
 export default StudentProfile;

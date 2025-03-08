@@ -47,7 +47,7 @@ const Register = () => {
 
     try {
       const response = await axios.post('http://localhost:5000/api/auth/register', {
-        fullname: formData.fullName,    // Changed from name to fullname
+        fullname: formData.fullName,    
         email: formData.email,
         contact: formData.contact,
         batch: formData.batch,
