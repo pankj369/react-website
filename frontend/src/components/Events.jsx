@@ -41,10 +41,36 @@ const eventsData = [
 const Events = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
 
   const handleEventClick = (event) => {
     setSelectedEvent(event);
     setShowModal(true);
+  };
+
+  const handleRegistration = async (e) => {
+    e.preventDefault();
+    // Send registration data to the backend API
+    const response = await fetch('/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, email, phone }),
+
+    });
+
+    if (response.ok) {
+      alert("Registration successful!");
+      setShowModal(false);
+      setName("");
+      setEmail("");
+      setPhone("");
+    } else {
+      alert("Registration failed. Please try again.");
+    }
   };
 
   return (
@@ -110,13 +136,35 @@ const Events = () => {
                     <p><i className="fas fa-users"></i> Available Seats: {selectedEvent.seats}</p>
                   </div>
                 </div>
+                <form onSubmit={handleRegistration}>
+                  <input 
+                    type="text" 
+                    placeholder="Enter Your Name" 
+                    value={name} 
+                    onChange={(e) => setName(e.target.value)} 
+                    required 
+                  />
+                  <input 
+                    type="email" 
+                    placeholder="Enter Your Email" 
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)} 
+                    required 
+                  />
+                   <input 
+                    type="number" 
+                    placeholder="Enter Your Phone Number" 
+                    value={phone} 
+                    onChange={(e) => setPhone(e.target.value)} 
+                    required 
+                  />
+
+                  <Button type="submit" variant="primary">Register Now</Button>
+                </form>
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={() => setShowModal(false)}>
                   Close
-                </Button>
-                <Button variant="primary">
-                  Register Now
                 </Button>
               </Modal.Footer>
             </>

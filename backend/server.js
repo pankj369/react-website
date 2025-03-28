@@ -1,5 +1,7 @@
 require('dotenv').config();
 const express = require('express');
+const eventRegistrationRoutes = require('./routes/eventRegistrationRoutes'); // Import event registration routes
+
 const cors = require('cors');
 const mysql = require('mysql2');
 const authRoutes = require('./routes/authRoutes');
@@ -25,7 +27,6 @@ db.connect((err) => {
 });
 
 // Middleware
-// Update CORS configuration
 app.use(cors({
     origin: 'http://localhost:3000', // Update this to match your frontend URL
     credentials: true
@@ -42,6 +43,7 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', bookRoutes);
 app.use('/api/admin', studentRoutes);
+app.use('/api', eventRegistrationRoutes); // Register event registration routes
 
 // Error handling middleware
 app.use((err, req, res, next) => {
