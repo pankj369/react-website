@@ -17,8 +17,8 @@ const NavigationBar = () => {
             <i className="fas fa-book-reader me-2"></i>
             SuccessLibrary
           </Navbar.Brand>
-          <Navbar.Toggle 
-            aria-controls="basic-navbar-nav" 
+          <Navbar.Toggle
+            aria-controls="basic-navbar-nav"
             onClick={handleSidebarShow}
           />
           <Navbar.Collapse id="basic-navbar-nav" className="d-none d-lg-block">
@@ -28,6 +28,9 @@ const NavigationBar = () => {
               </Nav.Link>
               <Nav.Link href="#features" className="nav-link-custom">
                 <i className="fas fa-star me-1"></i> Features
+              </Nav.Link>
+              <Nav.Link href="/events" className="nav-link-custom">
+                <i className="fas fa-calendar-alt me-1"></i> Upcoming Events
               </Nav.Link>
               <Nav.Link href="#about" className="nav-link-custom">
                 <i className="fas fa-info-circle me-1"></i> About

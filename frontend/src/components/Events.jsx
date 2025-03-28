@@ -50,26 +50,35 @@ const Events = () => {
     setShowModal(true);
   };
 
-  const handleRegistration = async (e) => {
+const handleRegistration = async (e) => {
+    console.log("Registration initiated with data:", { event_id: selectedEvent.id, name, email, phone });
+
     e.preventDefault();
     // Send registration data to the backend API
-    const response = await fetch('/api/register', {
+    const response = await fetch('/api/register', { 
+        // Check if the API endpoint is reachable
+
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name, email, phone }),
+      body: JSON.stringify({ event_id: selectedEvent.id, name, email, phone }),
 
     });
 
-    if (response.ok) {
+
+    if (response.ok) { 
+        console.log("Registration successful:", await response.json());
+
       alert("Registration successful!");
       setShowModal(false);
       setName("");
       setEmail("");
       setPhone("");
     } else {
-      alert("Registration failed. Please try again.");
+      alert("Registration failed. Please try again."); 
+      console.error("Registration error:", response.statusText);
+
     }
   };
 
@@ -150,6 +159,8 @@ const Events = () => {
                     value={email} 
                     onChange={(e) => setEmail(e.target.value)} 
                     required 
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" 
+                    title="Please enter a valid email address." 
                   />
                    <input 
                     type="number" 

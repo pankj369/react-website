@@ -51,7 +51,7 @@ app.use((err, req, res, next) => {
     res.status(500).json({ message: 'Something went wrong!' });
 });
 
-const PORT = process.env.PORT || 5000; // Make sure this matches your frontend API calls
+const PORT = process.env.PORT || 3000; // Make sure this matches your frontend API calls
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

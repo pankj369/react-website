@@ -2,17 +2,28 @@ const db = require('../config/db'); // Assuming you have a db.js file for databa
 
 // Controller function to handle event registration
 const registerForEvent = async (req, res) => {
-  const { name, email, phone } = req.body; 
+  const { event_id, name, email, phone } = req.body; 
 
   // Validate input
-  if (!name || !email || !phone) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email regex
+  const phoneRegex = /^\d{10}$/; // Assuming a 10-digit phone number
+
+  if (!event_id || !name || !email || !phone) {
     return res.status(400).json({ message: 'All fields are required.' });
+  }
+
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: 'Invalid email format.' });
+  }
+
+  if (!phoneRegex.test(phone)) {
+    return res.status(400).json({ message: 'Invalid phone number format. Must be 10 digits.' });
   }
 
   try {
     // Insert registration data into the database
-    const query = 'INSERT INTO registrations (name, email, phone) VALUES (?, ?, ?)'; 
-    await db.query(query, [name, email, phone]);
+    const query = 'INSERT INTO registrations (event_id, name, email, phone) VALUES (?, ?, ?, ?)';
+    await db.query(query, [event_id, name, email, phone]);
 
     return res.status(201).json({ message: 'Registration successful!' });
   } catch (error) {
