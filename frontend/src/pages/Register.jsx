@@ -31,6 +31,23 @@ const Register = () => {
     setError('');
     
     // Validate all required fields
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Email regex pattern
+    const phonePattern = /^[0-9]{10}$/; // Phone number must be 10 digits
+
+    // Validate email format
+    if (!emailPattern.test(formData.email)) {
+        setError('Please enter a valid email address');
+        setLoading(false);
+        return;
+    }
+
+    // Validate phone number format
+    if (!phonePattern.test(formData.contact)) {
+        setError('Please enter a valid 10-digit phone number');
+        setLoading(false);
+        return;
+    }
+
     if (!formData.fullName || !formData.email || !formData.contact || 
         !formData.batch || !formData.password || !formData.confirmPassword) {
       setError('Please fill in all fields');
