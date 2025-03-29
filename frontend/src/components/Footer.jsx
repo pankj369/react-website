@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Link } from 'react-router-dom';
+
 import "./Footer.css";
 
 function Footer() {
@@ -72,16 +74,16 @@ function Footer() {
             <h4>Customer support</h4>
             <ul>
               <li>
-                <a href="#">About Us</a>
+                  <Link to="/about">About Us</Link>
               </li>
               <li>
-                <a href="#">Support</a>
+                  <Link to="/support">Support</Link>
               </li>
               <li>
-                <a href="Privacy policy.html">Privacy Policy</a>
+                  <Link to="/privacy-policy">Privacy Policy</Link>
               </li>
               <li>
-                <a href="Terms and condition.html">Terms & Conditions</a>
+                  <Link to="/terms-and-conditions">Terms & Conditions</Link>
               </li>
             </ul>
           </div>
@@ -90,18 +92,18 @@ function Footer() {
         <div className="footer-bottom">
           <p>&copy; 2024 Library Website. All rights reserved.</p>
           <div className="social-links">
-            <a href="#">
+            <Link to="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
               <i className="fab fa-facebook-f"></i>
-            </a>
-            <a href="#">
+            </Link>
+            <Link to="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
               <i className="fab fa-twitter"></i>
-            </a>
-            <a href="#">
+            </Link>
+            <Link to="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
               <i className="fab fa-instagram"></i>
-            </a>
-            <a href="#">
+            </Link>
+            <Link to="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
               <i className="fab fa-linkedin-in"></i>
-            </a>
+            </Link>
           </div>
         </div>
       </div>

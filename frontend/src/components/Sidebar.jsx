@@ -1,5 +1,5 @@
-import React from 'react';
-import { Offcanvas, Nav } from 'react-bootstrap';
+import React from "react";
+import { Offcanvas, Nav } from "react-bootstrap";
 
 const Sidebar = ({ show, handleClose }) => {
   return (
@@ -9,11 +9,11 @@ const Sidebar = ({ show, handleClose }) => {
       </Offcanvas.Header>
       <Offcanvas.Body>
         <Nav className="flex-column">
-          <Nav.Link href="/" onClick={handleClose}>
-            <i className="fas fa-home me-2"></i> Home
-          </Nav.Link>
           <Nav.Link href="#features" onClick={handleClose}>
             <i className="fas fa-star me-2"></i> Features
+          </Nav.Link>
+          <Nav.Link href="#events" onClick={handleClose}>
+            <i className="fas fa-calendar-alt me-1"></i> Upcoming Events
           </Nav.Link>
           <Nav.Link href="#about" onClick={handleClose}>
             <i className="fas fa-info-circle me-2"></i> About

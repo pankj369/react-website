@@ -23,21 +23,20 @@ const NavigationBar = () => {
           />
           <Navbar.Collapse id="basic-navbar-nav" className="d-none d-lg-block">
             <Nav className="ms-auto align-items-center">
-              <Nav.Link href="/" className="nav-link-custom">
-                <i className="fas fa-home me-1"></i> Home
-              </Nav.Link>
               <Nav.Link href="#features" className="nav-link-custom">
                 <i className="fas fa-star me-1"></i> Features
               </Nav.Link>
-              <Nav.Link href="/events" className="nav-link-custom">
+              <Nav.Link href="#events" className="nav-link-custom">
                 <i className="fas fa-calendar-alt me-1"></i> Upcoming Events
               </Nav.Link>
               <Nav.Link href="#about" className="nav-link-custom">
                 <i className="fas fa-info-circle me-1"></i> About
               </Nav.Link>
-              <Nav.Link href="/login" className="nav-link-custom">
-                <i className="fas fa-sign-in-alt me-1"></i> Login
-              </Nav.Link>
+              {localStorage.getItem("token") ? null : (
+                <Nav.Link href="/login" className="nav-link-custom">
+                  <i className="fas fa-sign-in-alt me-1"></i> Login
+                </Nav.Link>
+              )}
               <Button href="/register" className="btn-custom ms-2">
                 <i className="fas fa-user-plus me-1"></i> Sign Up
               </Button>

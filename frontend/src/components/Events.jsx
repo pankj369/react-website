@@ -8,33 +8,36 @@ const eventsData = [
     title: "Book Reading Session",
     date: "March 10, 2025",
     time: "4:00 PM - 6:00 PM",
-    description: "Join us for an engaging book reading session with renowned authors.",
+    description:
+      "Join us for an engaging book reading session with renowned authors.",
     image: "https://source.unsplash.com/400x250/?books,library",
     location: "Main Library Hall",
     seats: 50,
-    speaker: "Dr. Sarah Johnson"
+    speaker: "Dr. Sarah Johnson",
   },
   {
     id: 2,
     title: "Coding Bootcamp",
     date: "March 15, 2025",
     time: "10:00 AM - 3:00 PM",
-    description: "A hands-on workshop on JavaScript, React, and backend development.",
+    description:
+      "A hands-on workshop on JavaScript, React, and backend development.",
     image: "https://source.unsplash.com/400x250/?coding,technology",
     location: "Tech Lab",
     seats: 30,
-    speaker: "Prof. Michael Chen"
+    speaker: "Prof. Michael Chen",
   },
   {
     id: 3,
     title: "Career Guidance Seminar",
     date: "March 20, 2025",
     time: "1:00 PM - 4:00 PM",
-    description: "Get career advice from industry experts and plan your future effectively.",
+    description:
+      "Get career advice from industry experts and plan your future effectively.",
     image: "https://source.unsplash.com/400x250/?seminar,career",
     location: "Conference Room",
     seats: 100,
-    speaker: "Ms. Emily Parker"
+    speaker: "Ms. Emily Parker",
   },
 ];
 
@@ -50,25 +53,28 @@ const Events = () => {
     setShowModal(true);
   };
 
-const handleRegistration = async (e) => {
-    console.log("Registration initiated with data:", { event_id: selectedEvent.id, name, email, phone });
+  const handleRegistration = async (e) => {
+    console.log("Registration initiated with data:", {
+      event_id: selectedEvent.id,
+      name,
+      email,
+      phone,
+    });
 
     e.preventDefault();
     // Send registration data to the backend API
-    const response = await fetch('/api/register', { 
-        // Check if the API endpoint is reachable
+    const response = await fetch("/api/register", {
+      // Check if the API endpoint is reachable
 
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ event_id: selectedEvent.id, name, email, phone }),
-
     });
 
-
-    if (response.ok) { 
-        console.log("Registration successful:", await response.json());
+    if (response.ok) {
+      console.log("Registration successful:", await response.json());
 
       alert("Registration successful!");
       setShowModal(false);
@@ -76,9 +82,8 @@ const handleRegistration = async (e) => {
       setEmail("");
       setPhone("");
     } else {
-      alert("Registration failed. Please try again."); 
+      alert("Registration failed. Please try again.");
       console.error("Registration error:", response.statusText);
-
     }
   };
 
@@ -97,8 +102,8 @@ const handleRegistration = async (e) => {
                 <div className="event-image">
                   <Card.Img variant="top" src={event.image} alt={event.title} />
                   <div className="event-overlay">
-                    <Button 
-                      variant="light" 
+                    <Button
+                      variant="light"
                       className="details-btn"
                       onClick={() => handleEventClick(event)}
                     >
@@ -114,8 +119,12 @@ const handleRegistration = async (e) => {
                   <Card.Title>{event.title}</Card.Title>
                   <Card.Text>{event.description}</Card.Text>
                   <div className="event-info">
-                    <span><i className="far fa-clock"></i> {event.time}</span>
-                    <span><i className="fas fa-map-marker-alt"></i> {event.location}</span>
+                    <span>
+                      <i className="far fa-clock"></i> {event.time}
+                    </span>
+                    <span>
+                      <i className="fas fa-map-marker-alt"></i> {event.location}
+                    </span>
                   </div>
                 </Card.Body>
               </Card>
@@ -130,47 +139,65 @@ const handleRegistration = async (e) => {
                 <Modal.Title>{selectedEvent.title}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <img 
-                  src={selectedEvent.image} 
-                  alt={selectedEvent.title} 
+                <img
+                  src={selectedEvent.image}
+                  alt={selectedEvent.title}
                   className="modal-image"
                 />
                 <div className="event-details">
-                  <p className="event-description">{selectedEvent.description}</p>
+                  <p className="event-description">
+                    {selectedEvent.description}
+                  </p>
                   <div className="event-meta">
-                    <p><i className="far fa-calendar-alt"></i> {selectedEvent.date}</p>
-                    <p><i className="far fa-clock"></i> {selectedEvent.time}</p>
-                    <p><i className="fas fa-map-marker-alt"></i> {selectedEvent.location}</p>
-                    <p><i className="fas fa-user-tie"></i> Speaker: {selectedEvent.speaker}</p>
-                    <p><i className="fas fa-users"></i> Available Seats: {selectedEvent.seats}</p>
+                    <p>
+                      <i className="far fa-calendar-alt"></i>{" "}
+                      {selectedEvent.date}
+                    </p>
+                    <p>
+                      <i className="far fa-clock"></i> {selectedEvent.time}
+                    </p>
+                    <p>
+                      <i className="fas fa-map-marker-alt"></i>{" "}
+                      {selectedEvent.location}
+                    </p>
+                    <p>
+                      <i className="fas fa-user-tie"></i> Speaker:{" "}
+                      {selectedEvent.speaker}
+                    </p>
+                    <p>
+                      <i className="fas fa-users"></i> Available Seats:{" "}
+                      {selectedEvent.seats}
+                    </p>
                   </div>
                 </div>
                 <form onSubmit={handleRegistration}>
-                  <input 
-                    type="text" 
-                    placeholder="Enter Your Name" 
-                    value={name} 
-                    onChange={(e) => setName(e.target.value)} 
-                    required 
+                  <input
+                    type="text"
+                    placeholder="Enter Your Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
                   />
-                  <input 
-                    type="email" 
-                    placeholder="Enter Your Email" 
-                    value={email} 
-                    onChange={(e) => setEmail(e.target.value)} 
-                    required 
-                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" 
-                    title="Please enter a valid email address." 
+                  <input
+                    type="email"
+                    placeholder="Enter Your Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                    title="Please enter a valid email address."
                   />
-                   <input 
-                    type="number" 
-                    placeholder="Enter Your Phone Number" 
-                    value={phone} 
-                    onChange={(e) => setPhone(e.target.value)} 
-                    required 
+                  <input
+                    type="number"
+                    placeholder="Enter Your Phone Number"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    required
                   />
 
-                  <Button type="submit" variant="primary">Register Now</Button>
+                  <Button type="submit" variant="primary">
+                    Register Now
+                  </Button>
                 </form>
               </Modal.Body>
               <Modal.Footer>

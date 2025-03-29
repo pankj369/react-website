@@ -1,51 +1,56 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import './Login.css';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import "./Login.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { handleGoogleSignIn, handleFacebookSignIn, handleGithubSignIn } from './SocialAuth';
+
 const Login = () => {
+
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    rememberMe: false
+    email: "",
+    password: "",
+    rememberMe: false,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-        const response = await axios.post('http://localhost:5000/api/auth/login', {
-            email: formData.email,
-            password: formData.password
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        {
+          email: formData.email,
+          password: formData.password,
         },
         {
           withCredentials: true,
           headers: {
-              'Content-Type': 'application/json'
-          }
-      }
-      );
-        if (response.data) {
-            // Store token and user data
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
-            
-            // Redirect based on role
-            if (response.data.user.role === 'student') {
-                navigate('/student/dashboard');  // Updated path
-            } else if (response.data.user.role === 'admin') {
-                navigate('/admin/dashboard');    // Updated path
-            }
+            "Content-Type": "application/json",
+          },
         }
+      );
+      if (response.data) {
+        // Store token and user data
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+
+        // Redirect based on role
+        if (response.data.user.role === "student") {
+          navigate("/student/dashboard"); // Updated path
+        } else if (response.data.user.role === "admin") {
+          navigate("/admin/dashboard"); // Updated path
+        }
+      }
     } catch (error) {
-        console.error('Login error:', error);
-        setError(error.response?.data?.message || 'Invalid email or password');
+      console.error("Login error:", error);
+      setError(error.response?.data?.message || "Invalid email or password");
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
   return (
@@ -54,10 +59,12 @@ const Login = () => {
         <div className="shape"></div>
         <div className="shape"></div>
       </div>
-      
+
       <Container>
         <Row className="justify-content-center">
-          <Col md={6} lg={5}>            <div className="auth-card">
+          <Col md={6} lg={5}>
+            {" "}
+            <div className="auth-card">
               <div className="auth-header">
                 <div className="auth-logo">
                   <i className="fas fa-book-reader"></i>
@@ -80,7 +87,9 @@ const Login = () => {
                       type="email"
                       placeholder="Email address"
                       value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
                       required
                       className="input-field"
                     />
@@ -95,7 +104,9 @@ const Login = () => {
                       type={showPassword ? "text" : "password"}
                       placeholder="Password"
                       value={formData.password}
-                      onChange={(e) => setFormData({...formData, password: e.target.value})}
+                      onChange={(e) =>
+                        setFormData({ ...formData, password: e.target.value })
+                      }
                       required
                       className="input-field"
                     />
@@ -104,7 +115,11 @@ const Login = () => {
                       className="password-toggle"
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                      <i
+                        className={`fas ${
+                          showPassword ? "fa-eye-slash" : "fa-eye"
+                        }`}
+                      ></i>
                     </button>
                     <span className="focus-border"></span>
                   </div>
@@ -115,7 +130,9 @@ const Login = () => {
                     type="checkbox"
                     label="Remember me"
                     checked={formData.rememberMe}
-                    onChange={(e) => setFormData({...formData, rememberMe: e.target.checked})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, rememberMe: e.target.checked })
+                    }
                     className="remember-check"
                   />
                   <Link to="/forgot-password" className="forgot-link">
@@ -123,9 +140,9 @@ const Login = () => {
                   </Link>
                 </div>
 
-                <Button 
-                  type="submit" 
-                  className={`auth-button ${loading ? 'loading' : ''}`}
+                <Button
+                  type="submit"
+                  className={`auth-button ${loading ? "loading" : ""}`}
                   disabled={loading}
                 >
                   {loading ? (
@@ -133,7 +150,9 @@ const Login = () => {
                       <span className="spinner"></span>
                       Logging in...
                     </>
-                  ) : 'Login'}
+                  ) : (
+                    "Login"
+                  )}
                 </Button>
 
                 <div className="auth-separator">
@@ -141,23 +160,40 @@ const Login = () => {
                 </div>
 
                 <div className="social-buttons">
-                  <button type="button" className="social-btn google">
+                  <button
+                    type="button"
+                    className="social-btn google"
+                    onClick={handleGoogleSignIn}
+                  >
                     <i className="fab fa-google"></i>
                   </button>
-                  <button type="button" className="social-btn facebook">
+                  <button
+                    type="button"
+                    className="social-btn facebook"
+                    onClick={handleFacebookSignIn}
+                  >
                     <i className="fab fa-facebook-f"></i>
                   </button>
-                  <button type="button" className="social-btn github">
+                  <button
+                    type="button"
+                    className="social-btn github"
+                    onClick={handleGithubSignIn}
+                  >
                     <i className="fab fa-github"></i>
                   </button>
                 </div>
 
                 <p className="register-prompt">
-                  Don't have an account? 
+                  Don't have an account?
                   <Link to="/register" className="register-link">
                     Register now
                   </Link>
                 </p>
+                <p className="footer-links">
+                  <Link to="/privacy-policy">Privacy Policy</Link> | 
+                  <Link to="/terms-and-conditions">Terms & Conditions</Link>
+                </p>
+
               </Form>
             </div>
           </Col>

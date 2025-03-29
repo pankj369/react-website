@@ -251,6 +251,9 @@ const Register = () => {
                   </Button>
 
                   <p className="text-center mt-4">
+                    <Link to="/privacy-policy">Privacy Policy</Link> | 
+                    <Link to="/terms-and-conditions">Terms & Conditions</Link>
+
                     Already have an account? <Link to="/login">Login</Link>
                   </p>
                 </Form>

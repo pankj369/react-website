@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from 'react-router-dom';
+
 import { Container, Row, Col } from 'react-bootstrap';
 import "./Features.css";
 
@@ -95,7 +97,7 @@ const Features = () => {
 
         <div className="features-cta text-center">
           <h3>Ready to explore our facilities?</h3>
-          <button className="btn btn-primary btn-lg">Get Started Today</button>
+          <Link to="/register" className="btn btn-primary btn-lg">Get Started Today</Link>
         </div>
       </Container>
     </section>
