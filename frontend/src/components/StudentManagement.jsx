@@ -1,93 +1,91 @@
-import React, { useState } from 'react';
-import { Card, Table, Button, Badge, Form, InputGroup } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Container, Table, Button, Alert } from 'react-bootstrap';
+import axios from 'axios';
 
-const StudentManagement = ({ students }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortField, setSortField] = useState('fullname');
-  const [sortDirection, setSortDirection] = useState('asc');
+const StudentManagement = () => {
+    const [students, setStudents] = useState([]);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(true);
 
-  const filteredStudents = students.filter(student =>
-    student.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.batch.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    useEffect(() => {
+        fetchStudents();
+    }, []);
 
-  const sortedStudents = [...filteredStudents].sort((a, b) => {
-    const direction = sortDirection === 'asc' ? 1 : -1;
-    return a[sortField] > b[sortField] ? direction : -direction;
-  });
+    const fetchStudents = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get('http://localhost:5000/api/admin/students', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setStudents(response.data);
+            setLoading(false);
+        } catch (error) {
+            setError('Failed to fetch students');
+            setLoading(false);
+        }
+    };
 
-  const handleSort = (field) => {
-    if (field === sortField) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortField(field);
-      setSortDirection('asc');
-    }
-  };
+    const handleStatusChange = async (studentId, newStatus) => {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.put(`http://localhost:5000/api/admin/students/${studentId}/status`, 
+                { status: newStatus },
+                { headers: { Authorization: `Bearer ${token}` }}
+            );
+            fetchStudents();
+        } catch (error) {
+            setError('Failed to update student status');
+        }
+    };
 
-  return (
-    <Card>
-      <Card.Header>
-        <div className="d-flex justify-content-between align-items-center">
-          <h5>Student Management</h5>
-          <InputGroup className="w-50">
-            <Form.Control
-              placeholder="Search students..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <Button variant="outline-secondary">
-              <i className="fas fa-search"></i>
-            </Button>
-          </InputGroup>
-        </div>
-      </Card.Header>
-      <Card.Body>
-        <Table responsive hover>
-          <thead>
-            <tr>
-              <th onClick={() => handleSort('fullname')} style={{ cursor: 'pointer' }}>
-                Full Name {sortField === 'fullname' && <i className={`fas fa-sort-${sortDirection}`}></i>}
-              </th>
-              <th onClick={() => handleSort('email')} style={{ cursor: 'pointer' }}>
-                Email {sortField === 'email' && <i className={`fas fa-sort-${sortDirection}`}></i>}
-              </th>
-              <th onClick={() => handleSort('batch')} style={{ cursor: 'pointer' }}>
-                Batch {sortField === 'batch' && <i className={`fas fa-sort-${sortDirection}`}></i>}
-              </th>
-              <th>Contact</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedStudents.map((student) => (
-              <tr key={student.id}>
-                <td>{student.fullname}</td>
-                <td>{student.email}</td>
-                <td>{student.batch}</td>
-                <td>{student.contact}</td>
-                <td>
-                  <Badge bg={student.active ? 'success' : 'danger'}>
-                    {student.active ? 'Active' : 'Inactive'}
-                  </Badge>
-                </td>
-                <td>
-                  <Button variant="outline-primary" size="sm" className="me-2">
-                    <i className="fas fa-edit"></i>
-                  </Button>
-                  <Button variant="outline-danger" size="sm">
-                    <i className="fas fa-trash"></i>
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </Card.Body>
-    </Card>
-  );
+    if (loading) return <div>Loading...</div>;
+
+    return (
+        <Container className="py-4">
+            <h2 className="mb-4">Student Management</h2>
+            {error && <Alert variant="danger">{error}</Alert>}
+
+            <Table striped bordered hover responsive>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th>Batch</th>
+                        <th>Registration Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {students.map(student => (
+                        <tr key={student.id}>
+                            <td>{student.id}</td>
+                            <td>{student.fullname}</td>
+                            <td>{student.email}</td>
+                            <th>{student.contact}</th>
+                            <td>{student.batch}</td>
+                            <td>{new Date(student.created_at).toLocaleDateString()}</td>
+                            <td>{student.status}</td>
+                            <td>
+                                <Button 
+                                    variant={student.status === 'active' ? 'danger' : 'success'}
+                                    size="sm"
+                                    onClick={() => handleStatusChange(
+                                        student.id, 
+                                        student.status === 'active' ? 'inactive' : 'active'
+                                    )}
+                                >
+                                    {student.status === 'active' ? 'Deactivate' : 'Activate'}
+                                </Button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
+        </Container>
+    );
 };
 
 export default StudentManagement;

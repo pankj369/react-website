@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Button, Modal, Form, Tabs, Tab } from 'react
 import axios from 'axios';
 import StudentManagement from '../components/StudentManagement';
 import BookManagement from '../components/BookManagement';
+import NotificationManagement from '../components/NotificationManagement';
 import Reports from '../components/Reports';
 import AdminSidebar from '../components/AdminSidebar';
 import AdminHeader from '../components/AdminHeader';
@@ -39,6 +40,7 @@ const AdminDashboard = () => {
     fetchDashboardData();
     fetchReportData();
   }, []);
+  
   const fetchDashboardData = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -59,6 +61,7 @@ const AdminDashboard = () => {
       console.error('Error fetching dashboard data:', error);
     }
   };
+
   const fetchReportData = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -79,6 +82,7 @@ const AdminDashboard = () => {
       console.error('Error fetching report data:', error);
     }
   };
+
   const renderOverviewTab = () => (
     <>
       <Row className="stats-row">
@@ -226,7 +230,14 @@ const AdminDashboard = () => {
             onClick={() => setActiveTab('students')}
           >
             <i className="fas fa-users"></i>
-            <span>Students</span>
+            <span>Students Management</span>
+          </button>
+          <button 
+            className={`nav-item ${activeTab === 'notifications' ? 'active' : ''}`}
+            onClick={() => setActiveTab('notifications')}
+          >
+            <i className="fas fa-bell"></i>
+            <span>Notifications</span>
           </button>
           <button 
             className={`nav-item ${activeTab === 'books' ? 'active' : ''}`}
@@ -276,6 +287,9 @@ const AdminDashboard = () => {
             </Tab>
             <Tab eventKey="students" title="Students">
               <StudentManagement students={students} />
+            </Tab>
+            <Tab eventKey="notifications" title="Notifications">
+              <NotificationManagement />
             </Tab>
             <Tab eventKey="books" title="Books">
               <BookManagement

@@ -167,6 +167,21 @@
   color: #1976d2;
 }
 
+.modal-content {
+  z-index: 1050; /* Ensure modal is above other content */
+}
+
+.modal-header, .modal-body {
+  padding: 20px; /* Add padding for better spacing */
+}
+
+.modal-body input {
+  width: 100%; /* Ensure inputs take full width */
+  padding: 10px; /* Add padding for better usability */
+  border-radius: 5px; /* Rounded corners for inputs */
+  border: 1px solid #ccc; /* Border for inputs */
+}
+
 @media (max-width: 768px) {
   .sidebar {
     width: 70px;

@@ -1,14 +1,13 @@
-const router = require('express').Router();
-const dashboardController = require('../controllers/dashboardController');
-const { verifyToken } = require('../middleware/authMiddleware');
-const auth = require('../middleware/auth');
+const express = require('express');
+const { getStudentDashboard, getAllStudents } = require('../controllers/dashboardController');
+const { adminAuth } = require('../middleware/adminAuth');
 
-router.get('/dashboard', verifyToken, dashboardController.getStudentDashboard);
+const router = express.Router();
 
-router.get('/student/stats', auth, dashboardController.getStudentStats);
-router.get('/admin/stats', auth, dashboardController.getAdminStats);
-router.get('/student/books', auth, dashboardController.getStudentBooks);
-router.get('/student/borrowings', auth, dashboardController.getStudentBorrowings);
-router.get('/student/attendance', auth, dashboardController.getStudentAttendance);
+// Route to get student dashboard data
+router.get('/student-dashboard', adminAuth, getStudentDashboard);
+
+// New route to get all students
+router.get('/students', adminAuth, getAllStudents);
 
 module.exports = router;

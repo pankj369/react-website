@@ -1,14 +1,35 @@
-const router = require('express').Router();
-const studentController = require('../controllers/studentController');
+const express = require('express');
+const router = express.Router();
 const auth = require('../middleware/auth');
-const adminAuth = require('../middleware/adminAuth');
+const db = require('../config/db');
 
-// Student routes
-router.get('/students', auth, adminAuth, studentController.getAllStudents);
-router.get('/students/:id', auth, adminAuth, studentController.getStudentById);
-router.post('/students', auth, adminAuth, studentController.createStudent);
-router.put('/students/:id', auth, adminAuth, studentController.updateStudent);
-router.delete('/students/:id', auth, adminAuth, studentController.deleteStudent);
-router.get('/students/search/:query', auth, adminAuth, studentController.searchStudents);
+// Get all students
+router.get('/students', auth, async (req, res) => {
+    try {
+        const [students] = await db.query(
+            'SELECT id, fullname, email, contact, batch, created_at, status FROM users WHERE role = "student" ORDER BY created_at DESC'
+        );
+        res.json(students);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching students' });
+    }
+});
+
+// Update student status
+router.put('/students/:id/status', auth, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+        
+        await db.query(
+            'UPDATE users SET status = ? WHERE id = ? AND role = "student"',
+            [status, id]
+        );
+        
+        res.json({ message: 'Student status updated successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating student status' });
+    }
+});
 
 module.exports = router;
