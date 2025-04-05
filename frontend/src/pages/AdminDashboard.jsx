@@ -244,7 +244,7 @@ const AdminDashboard = () => {
             onClick={() => setActiveTab('books')}
           >
             <i className="fas fa-book"></i>
-            <span>Books</span>
+            <span>Books Management</span>
           </button>
           <button 
             className={`nav-item ${activeTab === 'reports' ? 'active' : ''}`}

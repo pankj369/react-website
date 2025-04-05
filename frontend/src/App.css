@@ -1,0 +1,46 @@
+/* Global Modal Fixes */
+.modal {
+  z-index: 1050 !important;
+}
+
+.modal-content {
+  overflow: visible !important;
+  border-radius: 8px;
+  /* color: #000000; */
+}
+
+.modal-body {
+  background-color: #083b6e;
+  color: #000000;
+  padding: 1.5rem;
+  max-height: none !important;
+  overflow-y: visible !important;
+}
+
+.modal-body .form-control {
+  display: block !important;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #ced0d3 !important;
+  color: #000000 !important;
+  border: 1px solid #ced4da;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.modal-body input[type="file"] {
+  background-color: #ced0d3 !important;
+  color: #121213 !important;
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  display: block !important;
+}
+
+.modal-body .form-label {
+  display: block !important;
+  margin-bottom: 0.5rem;
+}
+
+.modal-body .form-group {
+  margin-bottom: 1rem;
+}

@@ -13,6 +13,7 @@ import BookManagement from './components/BookManagement';
 import StudentManagement from './components/StudentManagement';
 import BorrowingManagement from './components/BorrowingManagement';
 import Reports from './components/Reports';
+import './App.css';
 
 function App() {
   return (
