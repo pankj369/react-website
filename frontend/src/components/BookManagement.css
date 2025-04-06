@@ -38,3 +38,62 @@
 .book-management .form-group {
   margin-bottom: 1rem;
 }
+
+.stat-card {
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-right: 15px;
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.bg-success-light {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.bg-warning-light {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.bg-info-light {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+
+.alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1060;
+  min-width: 300px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

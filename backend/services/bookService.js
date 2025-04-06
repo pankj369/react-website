@@ -12,16 +12,18 @@ class BookService {
   }
 
   static async create(bookData) {
-    const { title, author, isbn, quantity, category } = bookData;
+    const { title, author, isbn, quantity, category, active } = bookData;
+    const status = active ? 'available' : 'unavailable';
     const [result] = await db.query(
-      'INSERT INTO books (title, author, isbn, quantity, available, category) VALUES (?, ?, ?, ?, ?, ?)',
-      [title, author, isbn, quantity, quantity, category]
+      'INSERT INTO books (title, author, isbn, quantity, available, category, status) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [title, author, isbn, quantity, quantity, category, status]
     );
     return result.insertId;
   }
 
   static async update(id, bookData) {
-    const { title, author, isbn, quantity, category, status } = bookData;
+    const { title, author, isbn, quantity, category, active } = bookData;
+    const status = active ? 'available' : 'unavailable';
     const [result] = await db.query(
       'UPDATE books SET title = ?, author = ?, isbn = ?, quantity = ?, category = ?, status = ? WHERE id = ?',
       [title, author, isbn, quantity, category, status, id]
