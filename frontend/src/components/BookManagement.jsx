@@ -133,11 +133,32 @@ const BookManagement = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formErrors, setFormErrors] = useState({});
   
+  const validateForm = () => {
+    const errors = {};
+    if (!formData.title.trim()) errors.title = 'Title is required';
+    if (!formData.author.trim()) errors.author = 'Author is required';
+    if (!formData.isbn.trim()) {
+      errors.isbn = 'ISBN is required';
+    } else if (!/^(?:\d{3}-)?\d{10}$|^(?:\d{3}-)?\d{13}$/.test(formData.isbn)) {
+      errors.isbn = 'Invalid ISBN format (use 10 or 13 digits with optional hyphens)';
+    }
+    if (!formData.category) errors.category = 'Category is required';
+    if (!formData.quantity || formData.quantity < 1) errors.quantity = 'Quantity must be at least 1';
+    if (!formData.price || formData.price < 0) errors.price = 'Price must be positive';
+    return errors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setFormErrors({});
     
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setFormErrors(validationErrors);
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const formDataToSend = new FormData();
       Object.keys(formData).forEach(key => {
@@ -433,8 +454,13 @@ const BookManagement = () => {
                     name="category"
                     value={formData.category}
                     onChange={handleChange}
-                    required
+                    isInvalid={!!formErrors.category}
                   >
+                    {formErrors.category && (
+                      <Form.Control.Feedback type="invalid">
+                        {formErrors.category}
+                      </Form.Control.Feedback>
+                    )}
                     <option value="">Select Category</option>
                     <option value="Fiction">Fiction</option>
                     <option value="Non-Fiction">Non-Fiction</option>
@@ -497,10 +523,13 @@ const BookManagement = () => {
                     placeholder="e.g., 29.99"
                     value={formData.price}
                     onChange={handleChange}
-                    required
                     step="0.01"
                     min="0"
+                    isInvalid={!!formErrors.price}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {formErrors.price}
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -515,8 +544,11 @@ const BookManagement = () => {
                     placeholder="e.g., 5"
                     value={formData.quantity}
                     onChange={handleChange}
-                    required
+                    isInvalid={!!formErrors.quantity}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {formErrors.quantity}
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col md={6}>

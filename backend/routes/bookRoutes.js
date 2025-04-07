@@ -24,9 +24,9 @@ const upload = multer({
   }
 }).single('cover_image');
 
-router.get('/admin/books', bookController.getAllBooks);
-router.post('/admin/books', upload, bookController.addBook);
-router.put('/admin/books/:id', upload, bookController.updateBook);
-router.delete('/admin/books/:id', bookController.deleteBook);
+router.get('/books', bookController.getAllBooks);
+router.post('/books', upload, bookController.addBook);
+router.put('/books/:id', upload, bookController.updateBook);
+router.delete('/books/:id', bookController.deleteBook);
 
 module.exports = router;

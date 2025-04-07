@@ -48,13 +48,32 @@ const bookController = {
             }
 
             try {
-                const { title, author, isbn, quantity, active } = req.body;
+                const { title, author, isbn, quantity, active, category, publisher, description, language, price } = req.body;
                 const cover_image = req.file ? `/uploads/books/${req.file.filename}` : null;
+                const location = 'Default Location'; // Set default location
 
+                // Ensure quantity is a number and at least 1
+                const parsedQuantity = Math.max(1, parseInt(quantity) || 1);
+                
                 const [result] = await db.query(
-                    `INSERT INTO books (title, author, isbn, quantity, available_quantity, cover_image, active) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?)`,
-                    [title, author, isbn, quantity, quantity, cover_image, active]
+                    `INSERT INTO books 
+                    (title, author, isbn, category, quantity, available_quantity, cover_image, active, publisher, description, language, price, location) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                    [
+                        title, 
+                        author, 
+                        isbn, 
+                        category || 'General', 
+                        parsedQuantity, 
+                        parsedQuantity,  // Set available_quantity same as quantity
+                        cover_image, 
+                        active !== false, 
+                        publisher || '',
+                        description || '',
+                        language || 'English',
+                        price || 0,
+                        location
+                    ]
                 );
 
                 res.status(201).json({
