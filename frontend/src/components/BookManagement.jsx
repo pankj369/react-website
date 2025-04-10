@@ -466,7 +466,7 @@ const BookManagement = () => {
                   <Form.Control
                     type="text"
                     name="title"
-                    placeholder="e.g., The Great Gatsby"
+                    placeholder="Enter Book Name"
                     value={formData.title}
                     onChange={handleChange}
                     required
@@ -479,7 +479,7 @@ const BookManagement = () => {
                   <Form.Control
                     type="text"
                     name="author"
-                    placeholder="e.g., F. Scott Fitzgerald"
+                    placeholder="Enter Author Name"
                     value={formData.author}
                     onChange={handleChange}
                     required
@@ -494,7 +494,7 @@ const BookManagement = () => {
                   <Form.Control
                     type="text"
                     name="isbn"
-                    placeholder="e.g., 978-0-7475-3269-9"
+                    placeholder="Enter ISBN number"
                     value={formData.isbn}
                     onChange={handleChange}
                     required
@@ -523,6 +523,7 @@ const BookManagement = () => {
                     <option value="History">History</option>
                     <option value="Literature">Literature</option>
                     <option value="Finance">Finance</option>
+
                   </Form.Select>
                 </Form.Group>
               </Col>
@@ -534,7 +535,7 @@ const BookManagement = () => {
                   <Form.Control
                     type="text"
                     name="publisher"
-                    placeholder="e.g., Penguin Books"
+                    placeholder="Enter Publisher Name"
                     value={formData.publisher}
                     onChange={handleChange}
                     required
