@@ -153,19 +153,20 @@ const BookManagement = () => {
 
   const validateForm = () => {
     const errors = {};
-    if (!formData.title.trim()) errors.title = "Title is required";
-    if (!formData.author.trim()) errors.author = "Author is required";
+    if (!formData.title.trim()) errors.title = 'Title is required';
+    if (!formData.author.trim()) errors.author = 'Author is required';
     if (!formData.isbn.trim()) {
-      errors.isbn = "ISBN is required";
-    } else if (!/^(?:\d{3}-)?\d{10}$|^(?:\d{3}-)?\d{13}$/.test(formData.isbn)) {
-      errors.isbn =
-        "Invalid ISBN format (use 10 or 13 digits with optional hyphens)";
+      errors.isbn = 'ISBN is required';
+    } else if (!/^(?:\d{3}-)?\d{10}$|^(?:\d{3}-)?\d{13}$/.test(formData.isbn.trim())) {
+      errors.isbn = 'Invalid ISBN format (use 10 or 13 digits with optional hyphens)';
     }
-    if (!formData.category) errors.category = "Category is required";
-    if (!formData.quantity || formData.quantity < 1)
-      errors.quantity = "Quantity must be at least 1";
-    if (!formData.price || formData.price < 0)
-      errors.price = "Price must be positive";
+    if (!formData.category) errors.category = 'Category is required';
+    if (!formData.quantity || formData.quantity < 1) errors.quantity = 'Quantity must be at least 1';
+    if (!formData.price || formData.price < 0) errors.price = 'Price must be positive';
+    if (!formData.publisher.trim()) errors.publisher = 'Publisher is required';
+    if (!formData.publication_date) errors.publication_date = 'Publication date is required';
+    if (!formData.language.trim()) errors.language = 'Language is required';
+    if (!formData.description.trim()) errors.description = 'Description is required';
     return errors;
   };
 
@@ -182,77 +183,78 @@ const BookManagement = () => {
 
     try {
       const formDataToSend = new FormData();
-      Object.keys(formData).forEach((key) => {
-        if (formData[key] !== null && formData[key] !== undefined) {
-          formDataToSend.append(key, formData[key]);
-        }
-      });
-
+      
+      // Convert price to number and handle empty values
+      const price = parseFloat(formData.price) || 0;
+      const quantity = parseInt(formData.quantity) || 0;
+      
+      // Append all form fields
+      formDataToSend.append('title', formData.title.trim());
+      formDataToSend.append('author', formData.author.trim());
+      formDataToSend.append('isbn', formData.isbn.trim());
+      formDataToSend.append('category', formData.category);
+      formDataToSend.append('quantity', quantity);
+      formDataToSend.append('description', formData.description.trim());
+      formDataToSend.append('publication_date', formData.publication_date);
+      formDataToSend.append('publisher', formData.publisher.trim());
+      formDataToSend.append('language', formData.language.trim());
+      formDataToSend.append('price', price);
+      formDataToSend.append('active', formData.active);
+  
+      // Only append cover_image if it exists
+      if (formData.cover_image instanceof File) {
+        formDataToSend.append('cover_image', formData.cover_image);
+      }
+  
       const response = editingBook
         ? await axios.put(
             `http://localhost:5000/api/admin/books/${editingBook.id}`,
             formDataToSend,
             {
-              headers: { "Content-Type": "multipart/form-data" },
+              headers: { 'Content-Type': 'multipart/form-data' },
               withCredentials: true,
             }
           )
         : await axios.post(
-            "http://localhost:5000/api/admin/books",
+            'http://localhost:5000/api/admin/books',
             formDataToSend,
             {
-              headers: { "Content-Type": "multipart/form-data" },
+              headers: { 'Content-Type': 'multipart/form-data' },
               withCredentials: true,
             }
           );
-
+  
       toast.success(
-        editingBook ? "Book updated successfully!" : "Book added successfully!",
+        editingBook ? 'Book updated successfully!' : 'Book added successfully!',
         {
-          position: "top-right",
+          position: 'top-right',
           autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
         }
       );
-
+  
       setShowModal(false);
+      setFormData({
+        title: '',
+        author: '',
+        isbn: '',
+        category: '',
+        quantity: 1,
+        description: '',
+        publication_date: '',
+        publisher: '',
+        language: '',
+        price: '',
+        active: true,
+        cover_image: null,
+      });
       await fetchBooks();
     } catch (error) {
-      console.error("Error saving book:", error);
-      const errorData = error.response?.data;
-
-      if (errorData?.field) {
-        setFormErrors({
-          [errorData.field]:
-            errorData.message ||
-            (errorData.field === "isbn"
-              ? "ISBN already exists"
-              : errorData.field === "title"
-              ? "Title already exists"
-              : errorData.field === "quantity"
-              ? "Must be positive number"
-              : errorData.field === "cover_image"
-              ? errorData.message
-              : errorData.field === "category"
-              ? "Invalid category"
-              : "Invalid value"),
-        });
-      } else {
-        toast.error(
-          errorData?.message || "Error saving book. Please try again.",
-          {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          }
-        );
-      }
+      console.error('Error saving book:', error);
+      const errorMessage = error.response?.data?.message || 'Error saving book. Please try again.';
+      toast.error(errorMessage, {
+        position: 'top-right',
+        autoClose: 5000,
+      });
     } finally {
       setIsLoading(false);
     }
